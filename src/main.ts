@@ -20,9 +20,7 @@ let otherInput:string[] = ["(", ")", "Backspace"];
 const ERROR:string = 'Error!', INFINITY:string = 'Infinity', NAN:string = 'NaN', Invalid:string = 'Invalid input', Empty:string = '', Message:string = 'Enter value between -1 and 1', Alert:string = 'Cannot divide by zero';
 let displayValue:string, mode:string, output:number, checkedCnt:number = 0;
 
-
 // ****************************************** DISPLAY INTO SCREEN **********************************
-
 
 window.onkeydown = (e) => { 
     const x = e.key; 

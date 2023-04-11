@@ -1,6 +1,37 @@
 /// <reference path="../Interfaces/BasicFunctions.ts"/>
 
 class BasicFunctionsClass implements basicFunctions.IBasicFunctions {
+    
+    display = (val:string):void => {
+
+        if(!checkForErrorMessage()) {
+            return;
+        }
+    
+        displayValue = dis.value;
+        let oldOperator = displayValue.slice(-1);
+    
+        if (op.includes(val) && op.includes(oldOperator)) {
+            dis.value = displayValue.slice(0, -1) + val;
+        } 
+        else if(val==Math.PI.toString() || val==Math.E.toString()) {
+            if(op.slice(0, 5).includes(oldOperator)) {
+                val = (checkedCnt==1)?Number.parseFloat(val).toExponential().toString():val;
+                dis.value += val;
+                return;
+            }
+            upper.value = Empty;
+            dis.value = val;
+        }
+        else {
+            if(!(op.includes(val)) && !(otherInput.includes(val))) {
+                val = (checkedCnt==1)?Number.parseFloat(val).toExponential().toString():val;
+            }
+            
+            dis.value += val;
+        }
+    }
+
     sqr = (): void => {
         if(!checkForErrorMessage()) {
             return;
@@ -92,6 +123,93 @@ class BasicFunctionsClass implements basicFunctions.IBasicFunctions {
             upper.value = 'e^(' + displayValue + ')';
             dis.value = Math.pow(Math.E, eval(displayValue)).toString();
         }
+    }
+
+    inverse = ():void => {
+        if(!checkForErrorMessage()) {
+            return;
+        }
+        displayValue = dis.value;
+        upper.value = '1/(' + displayValue + ')=';
+        try{
+            let inverseCalculation = eval(upper.value.slice(0, -1));
+            dis.value = Number.isFinite(inverseCalculation) ? inverseCalculation : ERROR;
+        }
+        catch {
+            dis.value = ERROR;
+        }
+    }
+
+    expo = ():void => {
+        if(!checkForErrorMessage()) {
+            return;
+        }
+    
+        displayValue = dis.value; 
+        const fE = displayValue!=Empty ? parseFloat(displayValue) : 0;
+        dis.value = fE.toExponential();
+    }
+
+    factorial = ():void => {
+        displayValue = dis.value;
+        if(!checkForErrorMessage() || Number.parseInt(displayValue)<0) {
+            dis.value = ERROR;
+            return;
+        }
+        
+        upper.value = 'fact(' + displayValue + ')';
+        let fact = 1;
+        if (parseFloat(displayValue) == 0 || parseFloat(displayValue) == 1) {
+            fact = 1;
+        } 
+        else {
+            for (let i = 1; i <= parseFloat(displayValue); i++) {
+                fact *= i;
+            }
+        }
+        dis.value = fact.toString();
+    }
+
+    plusminus = ():void => {
+        if(!checkForErrorMessage()) {
+            return;
+        }
+        displayValue = (dis.value);
+        dis.value = (eval(displayValue)>0) ? (0-eval(displayValue)).toString() : (Math.abs(eval(displayValue))).toString();
+    }
+
+    answer = (): void => {
+        displayValue = dis.value;
+    
+        if(!checkForErrorMessage() || displayValue==Invalid) {
+            return;
+        }
+    
+        let error = Empty;
+        try {
+            upper.value = displayValue + '=';
+            dis.value = Empty;
+    
+            let x = upper.value.slice(0, -1);
+    
+            if(x.includes("^")) {
+                x = x.replace('^', '**');
+            }
+            else if(x.includes("yroot")) {
+                let substrArr = x.split('yroot');
+                let rightOprand:string = substrArr[1].trim();
+                rightOprand = (1/eval(rightOprand)).toString();
+    
+                x = substrArr[0] + ' ** (' + rightOprand + ')';
+            }
+           
+            output = Number.isFinite(eval(x)) ? eval(x) : ERROR;
+        } 
+        catch {
+            error = ERROR;
+        }
+    
+        dis.value = (error==ERROR) ? ERROR : ((checkedCnt==1) ? Number.parseFloat(output.toString()).toExponential().toString() : output.toString());
     }
 
 }

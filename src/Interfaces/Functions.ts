@@ -1,5 +1,5 @@
 namespace functions {
-    interface FunctionMethods {
+    export interface IFunctionMethods {
         absolute():void;
         ceil():void;
         floor():void;

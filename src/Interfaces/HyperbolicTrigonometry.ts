@@ -1,5 +1,5 @@
 namespace hyperbolicTrigonometry {
-    export interface HyperbolicTrigonometricMethods {
+    export interface IHyperbolicTrigonometricMethods {
         sinh():void;
         cosh():void;
         tanh():void;

@@ -1,5 +1,5 @@
 namespace inverseTrigonometry {
-    export interface InverseTrigonometricMethods {
+    export interface IInverseTrigonometricMethods {
         sinInverse():void;
         cosInverse():void;
         tanInverse():void;

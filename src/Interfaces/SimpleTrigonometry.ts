@@ -1,5 +1,5 @@
 namespace simpleTrigonometry {
-    export interface SimpleTrigonometricMethods {
+    export interface ISimpleTrigonometricMethods {
         sin():void;
         cos():void;
         tan():void;

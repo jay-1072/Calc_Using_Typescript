@@ -1,8 +1,10 @@
-interface InverseTrigonometricMethods {
-    sinInverse():void;
-    cosInverse():void;
-    tanInverse():void;
-    secInverse():void;
-    cosecInverse():void;
-    cotInverse():void;
+namespace inverseTrigonometry {
+    export interface InverseTrigonometricMethods {
+        sinInverse():void;
+        cosInverse():void;
+        tanInverse():void;
+        secInverse():void;
+        cosecInverse():void;
+        cotInverse():void;
+    }
 }

@@ -1,8 +1,10 @@
-interface SimpleTrigonometricMethods {
-    sin():void;
-    cos():void;
-    tan():void;
-    sec():void;
-    cosec():void;
-    cot():void;
+namespace simpleTrigonometry {
+    export interface SimpleTrigonometricMethods {
+        sin():void;
+        cos():void;
+        tan():void;
+        sec():void;
+        cosec():void;
+        cot():void;
+    }
 }

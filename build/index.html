@@ -44,28 +44,26 @@
             </div>
 
             <div class="row my-3 add-gutter">
-                <div class="col text-center">
-                    <a role="button" id="mc" onclick="memoryClear()" disabled>MC</a>
+                <div class="col text-center" id="mc_div">
+                    <a role="button" id="mc" disabled>MC</a>
+                </div>
+                <div class="col" id="mr_div">
+                    <a role="button" id="mr" disabled>MR</a>
                 </div>
                 <div class="col">
-                    <a role="button" id="mr" onclick="memoryRead()" disabled>MR</a>
+                    <a role="button" id="mplus">M+</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="memoryPlus()">M+</a>
+                    <a role="button" id="mminus">M-</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="memoryMinus()">M-</a>
+                    <a role="button" id="mshow">MS</a>
                 </div>
-                <div class="col">
-                    <a role="button" onclick="memoryStore()">MS</a>
-                </div>
-                <div class="col">
-                    <a role="button" id="m" onclick="createMemoryTable()" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" disabled>M&nbsp;<i class="fa-solid fa-caret-down"></i>
+                <div class="col" id="m_div">
+                    <a role="button" id="m" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">M&nbsp;<i class="fa-solid fa-caret-down"></i>
                     </a>
 
-                    <div class="offcanvas offcanvas-bottom memory-div text-center" tabindex="-1" id="offcanvasBottom"
-                        aria-labelledby="offcanvasBottomLabel">
+                    <div class="offcanvas offcanvas-bottom memory-div text-center" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
                         <div class="offcanvas-body small" id="memory"></div>
                     </div>
                 </div>
@@ -96,25 +94,25 @@
                                     <!-- first sub container for sin-1 cos-1 tan-1 -->
                                     <div class="row">
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="sinInverse()">sin<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_sinI">sin<sup>-1</sup></a></li>
                                         </div>
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="cosInverse()">cos<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_cosI">cos<sup>-1</sup></a></li>
                                         </div>
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="tanInverse()">tan<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_tanI">tan<sup>-1</sup></a></li>
                                         </div>    
                                     </div>
                                     <!-- second sub container for sec-1 csc-1 cot-1 -->
                                     <div class="row mt-2">
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="secInverse()">sec<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_secI">sec<sup>-1</sup></a></li>
                                         </div>
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="cosecInverse()">csc<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_cosecI">csc<sup>-1</sup></a></li>
                                         </div>
                                         <div class="col-4 text-center">
-                                            <li><a role="button" class="dropdown-item" onclick="cotInverse()">cot<sup>-1</sup></a></li>
+                                            <li><a role="button" class="dropdown-item" id="_cotI">cot<sup>-1</sup></a></li>
                                         </div>    
                                     </div>
                                 </ul>
@@ -123,13 +121,13 @@
                          <!-- sub dropdown ends here -->
 
                             <div class="col-3 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="sin()">sin</a></li>
+                                <li><a role="button" class="dropdown-item" id="_sin">sin</a></li>
                             </div>
                             <div class="col-3 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="cos()">cos</a></li>
+                                <li><a role="button" class="dropdown-item" id="_cos">cos</a></li>
                             </div>
                             <div class="col-3 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="tan()">tan</a></li>
+                                <li><a role="button" class="dropdown-item" id="_tan">tan</a></li>
                             </div>
                         </div>
 
@@ -146,25 +144,25 @@
                                         <!-- first sub container for sinh cosh tanh -->
                                         <div class="row">
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item" onclick="sinh()">sinh</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_sinH">sinh</a></li>
                                             </div>
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item" onclick="cosh()">cosh</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_cosH">cosh</a></li>
                                             </div>
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item" onclick="tanh()">tanh</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_tanH">tanh</a></li>
                                             </div>    
                                         </div>
                                         <!-- first sub container for sech csch coth -->
                                         <div class="row mt-2">
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item" onclick="sech()">sech</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_secH">sech</a></li>
                                             </div>
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item"  onclick="cosech()">csch</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_cosecH">csch</a></li>
                                             </div>
                                             <div class="col-4 text-center">
-                                                <li><a role="button" class="dropdown-item" onclick="coth()">coth</a></li>
+                                                <li><a role="button" class="dropdown-item" id="_cotH">coth</a></li>
                                             </div>    
                                         </div>
                                     </ul>
@@ -172,13 +170,13 @@
                             </div>
 
                             <div class="col-3 text-center mt-2">
-                                <li><a role="button" class="dropdown-item" onclick="sec()">sec</a></li>
+                                <li><a role="button" class="dropdown-item" id="_sec">sec</a></li>
                             </div>
                             <div class="col-3 text-center mt-2">
-                                <li><a role="button" class="dropdown-item" onclick="cosec()">csc</a></li>
+                                <li><a role="button" class="dropdown-item" id="_cosec">csc</a></li>
                             </div>
                             <div class="col-3 text-center mt-2">
-                                <li><a role="button" class="dropdown-item" onclick="cot()">cot</a></li>
+                                <li><a role="button" class="dropdown-item" id="_cot">cot</a></li>
                             </div>
                         </div>
                     </ul>
@@ -194,26 +192,26 @@
                         <!-- first container for |x|,⌊x⌋,⌈x⌉  -->
                         <div class="row">
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="absolute()">|x|</a></li>
+                                <li><a role="button" class="dropdown-item" id="_absF">|x|</a></li>
                             </div>
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="floor()">⌊x⌋</a></li>
+                                <li><a role="button" class="dropdown-item" id="_floorF">⌊x⌋</a></li>
                             </div>
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="ceil()">⌈x⌉</a></li>
+                                <li><a role="button" class="dropdown-item" id="_ceilF" onclick="ceil()">⌈x⌉</a></li>
                             </div>
                         </div>
 
                         <!-- second container for rand, dms and deg -->
                         <div class="row mt-2">
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="rand()">rand</a></li>
+                                <li><a role="button" class="dropdown-item" id="_randF">rand</a></li>
                             </div>
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="degreeMinuteSecond()">&#x2192;dms</a></li>
+                                <li><a role="button" class="dropdown-item" id="_dmsF">&#x2192;dms</a></li>
                             </div>
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" onclick="deg()">&#x2192;deg</a></li>
+                                <li><a role="button" class="dropdown-item" id="_degF">&#x2192;deg</a></li>
                             </div>
                         </div>
                     </ul>
@@ -221,128 +219,128 @@
             </div>
             
             <div class="row add-gutter">
-                <div class="col">
-                    <a role="button" onclick="changeBtn()">2<sup>nd</sup></a>
+                <div class="col" id="_2nd_div">
+                    <a role="button" id="_2nd">2<sup>nd</sup></a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display(Math.PI.toString())">π</a>
+                    <a role="button" id="_PI">π</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display(Math.E.toString())">e</a>
+                    <a role="button" id="_E">e</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="clearScreen()">C</a>
+                    <a role="button" id="_delete">C</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="pop()"><i class="fa fa-delete-left"></i></a>
+                    <a role="button" id="_pop"><i class="fa fa-delete-left"></i></a>
                 </div>
             </div>
             
             <div class="row add-gutter">
-                <div class="col">
-                    <a role="button" id="sqr" onclick="sqr()">x<sup>2</sup></a>
+                <div class="col" id="sqr_div">
+                    <a role="button" id="sqr">x<sup>2</sup></a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="inverse()">1/x</a>
+                    <a role="button" id="_inverse">1/x</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="absolute()">|x|</a>
+                    <a role="button" id="_abs">|x|</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="expo()">exp</a>
+                    <a role="button" id="_exp">exp</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('%')">mod</a>
+                    <a role="button" id="_mod">mod</a>
                 </div>
             </div>
 
             <div class="row add-gutter">
-                <div class="col">
+                <div class="col" id="root_div">
                     <a role="button" id="root" onclick="sqroot()">2&#x221A;x</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('(')">(</a>
+                    <a role="button" id="_lbracket">(</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display(')')">)</a>
+                    <a role="button" id="_rbracket">)</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="factorial()">n!</a>
+                    <a role="button" id="_factorial" onclick="factorial()">n!</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('/')">÷</a>
-                </div>
-            </div>
-
-            <div class="row add-gutter">
-                <div class="col">
-                    <a role="button" id="expo" onclick="xtoy()">x<sup>y</sup></a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('7')">7</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('8')">8</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('9')">9</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('*')">×</a>
+                    <a role="button" id="_divide">÷</a>
                 </div>
             </div>
 
             <div class="row add-gutter">
-                <div class="col">
-                    <a role="button" id="tenpow" onclick="tentox()">10<sup>x</sup></a>
+                <div class="col" id="xtoy_div">
+                    <a role="button" id="xtoy">x<sup>y</sup></a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('4')">4</a>
+                    <a role="button" id="_seven">7</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('5')">5</a>
+                    <a role="button" id="_eight">8</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('6')">6</a>
+                    <a role="button" id="_nine">9</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('-')">–</a>
-                </div>
-            </div>
-
-            <div class="row add-gutter">
-                <div class="col">
-                    <a role="button" id="log" onclick="log()">log</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('1')">1</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('2')">2</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('3')">3</a>
-                </div>
-                <div class="col">
-                    <a role="button" onclick="display('+')">+</a>
+                    <a role="button" id="_multiply">×</a>
                 </div>
             </div>
 
             <div class="row add-gutter">
+                <div class="col" id="tenpow_div">
+                    <a role="button" id="tenpow">10<sup>x</sup></a>
+                </div>
                 <div class="col">
+                    <a role="button" id="_four">4</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_five">5</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_six">6</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_minus">–</a>
+                </div>
+            </div>
+
+            <div class="row add-gutter">
+                <div class="col" id="log_div">
+                    <a role="button" id="log">log</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_one">1</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_two">2</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_three">3</a>
+                </div>
+                <div class="col">
+                    <a role="button" id="_plus">+</a>
+                </div>
+            </div>
+
+            <div class="row add-gutter">
+                <div class="col" id="ln_div">
                     <a role="button" id="ln" onclick="ln()">ln</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="plusminus()"><sup>+</sup>/<sub>-</sub></a>
+                    <a role="button" id="_plus_minus" onclick="plusminus()"><sup>+</sup>/<sub>-</sub></a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('0')">0</a>
+                    <a role="button" id="_zero">0</a>
                 </div>
                 <div class="col">
-                    <a role="button" onclick="display('.')">.</a>
+                    <a role="button" id="_point">.</a>
                 </div>
                 <div class="col" style="background-color: rgb(149, 226, 232)">
-                    <a role="button" onclick="answer()">=</a>
+                    <a role="button" id="_equalTo" onclick="answer()">=</a>
                 </div>
             </div>
 

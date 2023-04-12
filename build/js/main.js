@@ -86,7 +86,7 @@ class Calculator {
         };
         /*****************************************************************Memory Functions************************/
         this.checkState = (state) => {
-            if (localStorage.getItem('Memory') != null) {
+            if (localStorage.getItem(MEMORY) != null) {
                 this._memoryTable.disabled = state;
                 this._memoryClear.disabled = state;
                 this._memoryRestore.disabled = state;
@@ -107,25 +107,20 @@ class Calculator {
             if (!this.checkForErrorMessage()) {
                 return;
             }
-            // (this._memoryTable as HTMLInputElement).disabled = false;
             this.displayValue = this.dis.value;
-            if (localStorage.getItem('Memory') != null) {
-                this.marr = JSON.parse(localStorage.getItem('Memory'));
+            if (localStorage.getItem(MEMORY) != null) {
+                this.marr = JSON.parse(localStorage.getItem(MEMORY));
             }
-            if (this.displayValue == this.Empty) {
-                this.marr.push(0);
-            }
-            else {
-                this.marr.push(parseFloat(this.dis.value));
-            }
-            localStorage.setItem('Memory', JSON.stringify(this.marr));
+            let temp = (this.displayValue == this.Empty) ? 0 : parseFloat(this.displayValue);
+            this.marr.push(temp);
+            localStorage.setItem(MEMORY, JSON.stringify(this.marr));
             this.checkState(false);
         };
         this.memoryRead = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem('Memory') == null) {
+            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
                 return;
             }
-            this.marr = JSON.parse(localStorage.getItem('Memory'));
+            this.marr = JSON.parse(localStorage.getItem(MEMORY));
             this.dis.value = this.marr[this.marr.length - 1].toString();
         };
         this.memoryClear = () => {
@@ -595,6 +590,7 @@ class Calculator {
 const WHITE_COLOR = 'rgb(255, 255, 255)';
 const LIGHTORANGE_COLOR = 'rgb(255, 191, 190)';
 const BLUE_COLOR = 'rgb(0, 128, 255)';
+const MEMORY = 'Memory';
 const _2nd_div = document.getElementById('_2nd_div').style;
 const _sqr_div = document.getElementById('sqr_div').style;
 const _root_div = document.getElementById('root_div').style;
@@ -662,6 +658,11 @@ const _secH = document.getElementById("_secH");
 const _cosecH = document.getElementById("_cosecH");
 const _cotH = document.getElementById("_cotH");
 const calcObj = new Calculator();
+document.addEventListener('click', (e) => {
+    if (!calcObj.checkForErrorMessage()) {
+        return;
+    }
+});
 calcObj.btntxt.onclick = () => {
     calcObj.textChange();
 };

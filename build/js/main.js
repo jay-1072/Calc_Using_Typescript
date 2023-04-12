@@ -2,39 +2,28 @@
 class Calculator {
     constructor() {
         this.textChange = () => {
-            this.btntxt.innerHTML = (this.btntxt.innerHTML == 'DEG') ? 'RAD' : 'DEG';
+            this.btntxt.innerHTML = (this.btntxt.innerHTML == this.degMode) ? this.radMode : this.degMode;
         };
         this.changeBtn = () => {
             if (this.btnCount % 2 === 1) {
-                document.getElementById('_2nd_div').style.backgroundColor = 'rgb(255, 255, 255)';
                 this._sqr.innerHTML = 'x<sup>2</sup>';
-                document.getElementById('sqr_div').style.backgroundColor = "rgb(255, 255, 255)";
                 this._root.innerHTML = '2&#x221A;x';
-                document.getElementById('root_div').style.backgroundColor = "rgb(255, 255, 255)";
                 this._xtoy.innerHTML = 'x<sup>y</sup>';
-                document.getElementById('xtoy_div').style.backgroundColor = "rgb(255, 255, 255)";
                 this._tenpow.innerHTML = '10<sup>x</sup>';
-                document.getElementById('tenpow_div').style.backgroundColor = "rgb(255, 255, 255)";
                 this._log.innerHTML = 'log';
-                document.getElementById('log_div').style.backgroundColor = "rgb(255, 255, 255)";
                 this._ln.innerHTML = 'ln';
-                document.getElementById('ln_div').style.backgroundColor = "rgb(255, 255, 255)";
+                _2nd_div.backgroundColor = _sqr_div.backgroundColor = _root_div.backgroundColor = _xtoy_div.backgroundColor = _tenpow_div.backgroundColor = _log_div.backgroundColor = _ln_div.backgroundColor = WHITE_COLOR;
                 this.btnCount = 0;
             }
             else {
-                document.getElementById('_2nd_div').style.backgroundColor = 'rgb(0, 128, 255)';
+                _2nd_div.backgroundColor = BLUE_COLOR;
                 this._sqr.innerHTML = 'x<sup>3</sup>';
-                document.getElementById('sqr_div').style.backgroundColor = "rgb(255, 191, 190)";
                 this._root.innerHTML = '3&#x221A;x';
-                document.getElementById('root_div').style.backgroundColor = "rgb(255, 191, 190)";
                 this._xtoy.innerHTML = 'y&#x221A;x';
-                document.getElementById('xtoy_div').style.backgroundColor = "rgb(255, 191, 190)";
                 this._tenpow.innerHTML = '2<sup>x</sup>';
-                document.getElementById('tenpow_div').style.backgroundColor = "rgb(255, 191, 190)";
                 this._log.innerHTML = 'log<sub>y</sub>x';
-                document.getElementById('log_div').style.backgroundColor = "rgb(255, 191, 190)";
                 this._ln.innerHTML = 'e<sup>x</sup>';
-                document.getElementById('ln_div').style.backgroundColor = "rgb(255, 191, 190)";
+                _sqr_div.backgroundColor = _root_div.backgroundColor = _xtoy_div.backgroundColor = _tenpow_div.backgroundColor = _log_div.backgroundColor = _ln_div.backgroundColor = LIGHTORANGE_COLOR;
                 this.btnCount = 1;
             }
         };
@@ -44,11 +33,11 @@ class Calculator {
         };
         this.fe = () => {
             if (this.checkedCnt == 0) {
-                this.btncheck.style.backgroundColor = "rgb(0, 128, 255)";
+                this.btncheck.style.backgroundColor = BLUE_COLOR;
                 this.checkedCnt = 1;
                 return;
             }
-            this.btncheck.style.backgroundColor = "White";
+            this.btncheck.style.backgroundColor = WHITE_COLOR;
             this.checkedCnt = 0;
         };
         this.inv_RAD_DEG = (val) => {
@@ -82,11 +71,10 @@ class Calculator {
         };
         /*****************************************************************clear screen and pop Functions************************/
         this.clearScreen = () => {
-            this.displayValue = this.dis.value;
-            if (this.displayValue == this.Empty) {
+            if (this.dis.value == this.Empty) {
                 this.upper.value = this.Empty;
             }
-            this.dis.value = '';
+            this.dis.value = this.Empty;
         };
         this.pop = () => {
             this.displayValue = this.dis.value;
@@ -594,6 +582,8 @@ class Calculator {
         this.Alert = 'Cannot divide by zero';
         this.displayValue = '0';
         this.mode = 'DEG';
+        this.degMode = 'DEG';
+        this.radMode = 'RAD';
         this.output = 0;
         this.checkedCnt = 0;
         this.btnCount = 0;
@@ -602,6 +592,16 @@ class Calculator {
         this.flag = true;
     }
 }
+const WHITE_COLOR = 'rgb(255, 255, 255)';
+const LIGHTORANGE_COLOR = 'rgb(255, 191, 190)';
+const BLUE_COLOR = 'rgb(0, 128, 255)';
+const _2nd_div = document.getElementById('_2nd_div').style;
+const _sqr_div = document.getElementById('sqr_div').style;
+const _root_div = document.getElementById('root_div').style;
+const _xtoy_div = document.getElementById('xtoy_div').style;
+const _tenpow_div = document.getElementById('tenpow_div').style;
+const _log_div = document.getElementById('log_div').style;
+const _ln_div = document.getElementById('ln_div').style;
 const dlt = document.getElementById("_delete");
 const pop = document.getElementById("_pop");
 const _mplus = document.getElementById("mplus");

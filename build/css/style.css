@@ -53,7 +53,7 @@ textarea {
 
 .col:hover, .col-2:hover {
     cursor: pointer;
-    background-color: rgb(199, 201, 200);
+    background-color: rgb(173, 232, 252);
 }
 
 div.add-gutter {

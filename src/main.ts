@@ -69,12 +69,6 @@ class Calculator {
          this.flag = true;
     }
 
-    disableMemory = (state:boolean):void => {
-        this._memoryClear.disabled = state;
-        this._memoryRestore.disabled = state;
-        this._memoryShow.disabled = state;
-    }
-
     textChange = ():void => {
         this.btntxt.innerHTML =  (this.btntxt.innerHTML=='DEG') ? 'RAD' : 'DEG';
     }
@@ -254,7 +248,7 @@ class Calculator {
         }
         this.marr = JSON.parse(localStorage.getItem('Memory')!);
         this.displayValue = this.dis.value;
-        this.marr[this.marr.length - 1] += parseFloat(this.displayValue);
+        this.marr[this.marr.length - 1] += this.displayValue!=='' ? parseFloat(this.displayValue) : 0;
         localStorage.setItem('Memory', JSON.stringify(this.marr));
     }
 
@@ -264,7 +258,7 @@ class Calculator {
         }
         this.marr = JSON.parse(localStorage.getItem('Memory')!);
         this.displayValue = this.dis.value;
-        this.marr[this.marr.length - 1] -= parseFloat(this.displayValue);
+        this.marr[this.marr.length - 1] -= this.displayValue!=='' ? parseFloat(this.displayValue) : 0;
         localStorage.setItem('Memory', JSON.stringify(this.marr));
     }
 
@@ -946,7 +940,7 @@ _mminus.onclick = ():void => {
 calcObj._memoryTable.onclick = ():void => {
     calcObj.createMemoryTable();
 }
-calcObj.checkState();
+calcObj.checkState(true);
 
 dlt.onclick = ():void => {
     calcObj.clearScreen();

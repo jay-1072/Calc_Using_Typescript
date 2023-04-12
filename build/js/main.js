@@ -1,11 +1,6 @@
 "use strict";
 class Calculator {
     constructor() {
-        this.disableMemory = (state) => {
-            this._memoryClear.disabled = state;
-            this._memoryRestore.disabled = state;
-            this._memoryShow.disabled = state;
-        };
         this.textChange = () => {
             this.btntxt.innerHTML = (this.btntxt.innerHTML == 'DEG') ? 'RAD' : 'DEG';
         };
@@ -160,7 +155,7 @@ class Calculator {
             }
             this.marr = JSON.parse(localStorage.getItem('Memory'));
             this.displayValue = this.dis.value;
-            this.marr[this.marr.length - 1] += parseFloat(this.displayValue);
+            this.marr[this.marr.length - 1] += this.displayValue !== '' ? parseFloat(this.displayValue) : 0;
             localStorage.setItem('Memory', JSON.stringify(this.marr));
         };
         this.memoryMinus = () => {
@@ -169,7 +164,7 @@ class Calculator {
             }
             this.marr = JSON.parse(localStorage.getItem('Memory'));
             this.displayValue = this.dis.value;
-            this.marr[this.marr.length - 1] -= parseFloat(this.displayValue);
+            this.marr[this.marr.length - 1] -= this.displayValue !== '' ? parseFloat(this.displayValue) : 0;
             localStorage.setItem('Memory', JSON.stringify(this.marr));
         };
         this.createMemoryTable = () => {
@@ -805,7 +800,7 @@ _mminus.onclick = () => {
 calcObj._memoryTable.onclick = () => {
     calcObj.createMemoryTable();
 };
-calcObj.checkState();
+calcObj.checkState(true);
 dlt.onclick = () => {
     calcObj.clearScreen();
 };

@@ -23,7 +23,7 @@
   </head>
   <body>
     <div class="__main">
-        <div class="__calculator container">
+        <div class="__calculator container" style="position: relative; border-radius: 5px;">
 
             <div style="background-color: rgba(255, 255, 255, 1); width: 100%;">
                 Scientific Calculator
@@ -36,10 +36,10 @@
 
             <div class="row my-3 add-gutter">
                 <div class="col-2 text-center">
-                    <a role="button" id="btntxt" onclick="textChange()">DEG</a>
+                    <a role="button" id="btntxt">DEG</a>
                 </div>
                 <div class="col-2 text-center" id="btn-check">
-                    <a role="button" onclick="fe()">F-E</a>
+                    <a role="button">F-E</a>
                 </div>
             </div>
 
@@ -63,13 +63,11 @@
                     <a role="button" id="m" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">M&nbsp;<i class="fa-solid fa-caret-down"></i>
                     </a>
 
-                    <div class="offcanvas offcanvas-bottom memory-div text-center" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+                    <div style="margin: auto; position: absolute; border-radius: 5px;" class="offcanvas offcanvas-bottom memory-div text-center" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
                         <div class="offcanvas-body small" id="memory"></div>
                     </div>
                 </div>
             </div>
-
-            <!-- <hr> -->
 
             <div class="row my-3 add-gutter">
 
@@ -198,7 +196,7 @@
                                 <li><a role="button" class="dropdown-item" id="_floorF">⌊x⌋</a></li>
                             </div>
                             <div class="col-4 text-center">
-                                <li><a role="button" class="dropdown-item" id="_ceilF" onclick="ceil()">⌈x⌉</a></li>
+                                <li><a role="button" class="dropdown-item" id="_ceilF">⌈x⌉</a></li>
                             </div>
                         </div>
 
@@ -256,7 +254,7 @@
 
             <div class="row add-gutter">
                 <div class="col" id="root_div">
-                    <a role="button" id="root" onclick="sqroot()">2&#x221A;x</a>
+                    <a role="button" id="root">2&#x221A;x</a>
                 </div>
                 <div class="col">
                     <a role="button" id="_lbracket">(</a>
@@ -265,7 +263,7 @@
                     <a role="button" id="_rbracket">)</a>
                 </div>
                 <div class="col">
-                    <a role="button" id="_factorial" onclick="factorial()">n!</a>
+                    <a role="button" id="_factorial">n!</a>
                 </div>
                 <div class="col">
                     <a role="button" id="_divide">÷</a>
@@ -328,10 +326,10 @@
 
             <div class="row add-gutter">
                 <div class="col" id="ln_div">
-                    <a role="button" id="ln" onclick="ln()">ln</a>
+                    <a role="button" id="ln">ln</a>
                 </div>
                 <div class="col">
-                    <a role="button" id="_plus_minus" onclick="plusminus()"><sup>+</sup>/<sub>-</sub></a>
+                    <a role="button" id="_plus_minus"><sup>+</sup>/<sub>-</sub></a>
                 </div>
                 <div class="col">
                     <a role="button" id="_zero">0</a>
@@ -340,7 +338,7 @@
                     <a role="button" id="_point">.</a>
                 </div>
                 <div class="col" style="background-color: rgb(149, 226, 232)">
-                    <a role="button" id="_equalTo" onclick="answer()">=</a>
+                    <a role="button" id="_equalTo">=</a>
                 </div>
             </div>
 

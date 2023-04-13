@@ -83,7 +83,7 @@ div.col, div.col-2, div.col-6, div.col-3 a, div.col-4 a {
 }
 
 @media screen and (min-width:320px) and (max-width:376px) {
-    .__calculator {
+    .__calculator, div.memory-div {
         width: 100%;
     }
 
@@ -93,7 +93,7 @@ div.col, div.col-2, div.col-6, div.col-3 a, div.col-4 a {
 }
 
 @media screen and (min-width:375px) and (max-width:426px) {
-    .__calculator {
+    .__calculator, div.memory-div {
         width: 100vw;
     }
 
@@ -103,7 +103,7 @@ div.col, div.col-2, div.col-6, div.col-3 a, div.col-4 a {
 }
 
 @media screen and (min-width:426px) and (max-width:769px) {
-    .__calculator {
+    .__calculator, div.memory-div {
         width: 70vw;
     }
 
@@ -113,7 +113,7 @@ div.col, div.col-2, div.col-6, div.col-3 a, div.col-4 a {
 }
 
 @media screen and (min-width:769px) and (max-width:1025px) {
-    .__calculator {
+    .__calculator, div.memory-div {
         width: 65vw;
     }
 
@@ -123,7 +123,7 @@ div.col, div.col-2, div.col-6, div.col-3 a, div.col-4 a {
 }
 
 @media screen and (min-width:1025px){
-    .__calculator {
+    .__calculator, div.memory-div {
         width: 35vw;
     }
 

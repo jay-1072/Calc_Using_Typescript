@@ -10,8 +10,8 @@ class Calculator {
                 this._root.innerHTML = '2&#x221A;x';
                 this._xtoy.innerHTML = 'x<sup>y</sup>';
                 this._tenpow.innerHTML = '10<sup>x</sup>';
-                this._log.innerHTML = 'log';
-                this._ln.innerHTML = 'ln';
+                this._log.innerHTML = LOG;
+                this._ln.innerHTML = LN;
                 _2nd_div.backgroundColor = _sqr_div.backgroundColor = _root_div.backgroundColor = _xtoy_div.backgroundColor = _tenpow_div.backgroundColor = _log_div.backgroundColor = _ln_div.backgroundColor = WHITE_COLOR;
                 this.btnCount = 0;
             }
@@ -27,10 +27,6 @@ class Calculator {
                 this.btnCount = 1;
             }
         };
-        this.checkForErrorMessage = () => {
-            this.displayValue = this.dis.value;
-            return (this.displayValue == this.ERROR) ? false : true;
-        };
         this.fe = () => {
             if (this.checkedCnt == 0) {
                 this.btncheck.style.backgroundColor = BLUE_COLOR;
@@ -45,28 +41,27 @@ class Calculator {
         };
         /*****************************************************************Display on Screen************************/
         this.display = (val) => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            this.displayValue = this.dis.value;
-            let oldOperator = this.displayValue.slice(-1);
-            if (this.op.includes(val) && this.op.includes(oldOperator)) {
-                this.dis.value = this.displayValue.slice(0, -1) + val;
-            }
-            else if (val == Math.PI.toString() || val == Math.E.toString()) {
-                if (this.op.slice(0, 5).includes(oldOperator)) {
-                    val = (this.checkedCnt == 1) ? Number.parseFloat(val).toExponential().toString() : val;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                let oldOperator = this.displayValue.slice(-1);
+                if (this.op.includes(val) && this.op.includes(oldOperator)) {
+                    this.dis.value = this.displayValue.slice(0, -1) + val;
+                }
+                else if (val == Math.PI.toString() || val == Math.E.toString()) {
+                    if (this.op.slice(0, 5).includes(oldOperator)) {
+                        val = (this.checkedCnt == 1) ? Number.parseFloat(val).toExponential().toString() : val;
+                        this.dis.value += val;
+                        return;
+                    }
+                    this.upper.value = this.Empty;
+                    this.dis.value = val;
+                }
+                else {
+                    if (!(this.op.includes(val)) && !(this.otherInput.includes(val))) {
+                        val = (this.checkedCnt == 1) ? Number.parseFloat(val).toExponential().toString() : val;
+                    }
                     this.dis.value += val;
-                    return;
                 }
-                this.upper.value = this.Empty;
-                this.dis.value = val;
-            }
-            else {
-                if (!(this.op.includes(val)) && !(this.otherInput.includes(val))) {
-                    val = (this.checkedCnt == 1) ? Number.parseFloat(val).toExponential().toString() : val;
-                }
-                this.dis.value += val;
             }
         };
         /*****************************************************************clear screen and pop Functions************************/
@@ -87,468 +82,423 @@ class Calculator {
         /*****************************************************************Memory Functions************************/
         this.checkState = (state) => {
             if (localStorage.getItem(MEMORY) != null) {
-                this._memoryTable.disabled = state;
-                this._memoryClear.disabled = state;
-                this._memoryRestore.disabled = state;
-                document.getElementById('mc_div').style.backgroundColor = 'rgb(255, 255, 255)';
-                document.getElementById('m_div').style.backgroundColor = 'rgb(255, 255, 255)';
-                document.getElementById('mr_div').style.backgroundColor = 'rgb(255, 255, 255)';
-                return;
+                _mc_div.backgroundColor = _m_div.backgroundColor = _mr_div.backgroundColor = WHITE_COLOR;
+            }
+            else {
+                _mc_div.backgroundColor = _m_div.backgroundColor = _mr_div.backgroundColor = MEMORY_DISABLE_COLOR;
             }
             this._memoryTable.disabled = state;
             this._memoryClear.disabled = state;
             this._memoryRestore.disabled = state;
-            document.getElementById('mc_div').style.backgroundColor = 'rgb(225, 225, 225)';
-            document.getElementById('m_div').style.backgroundColor = 'rgb(225, 225, 225)';
-            document.getElementById('mr_div').style.backgroundColor = 'rgb(225, 225, 225)';
-            // this._memoryClear.disabled = true;
         };
         this.memoryStore = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                if (localStorage.getItem(MEMORY) != null) {
+                    this.marr = JSON.parse(localStorage.getItem(MEMORY));
+                }
+                let temp = (this.displayValue == this.Empty) ? 0 : parseFloat(this.displayValue);
+                this.marr.push(temp);
+                localStorage.setItem(MEMORY, JSON.stringify(this.marr));
+                this.checkState(false);
             }
-            this.displayValue = this.dis.value;
-            if (localStorage.getItem(MEMORY) != null) {
-                this.marr = JSON.parse(localStorage.getItem(MEMORY));
-            }
-            let temp = (this.displayValue == this.Empty) ? 0 : parseFloat(this.displayValue);
-            this.marr.push(temp);
-            localStorage.setItem(MEMORY, JSON.stringify(this.marr));
-            this.checkState(false);
         };
         this.memoryRead = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+                this.marr = JSON.parse(localStorage.getItem(MEMORY));
+                this.dis.value = this.marr[this.marr.length - 1].toString();
             }
-            this.marr = JSON.parse(localStorage.getItem(MEMORY));
-            this.dis.value = this.marr[this.marr.length - 1].toString();
         };
         this.memoryClear = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+                this.marr = [];
+                localStorage.removeItem(MEMORY);
+                this.checkState(true);
             }
-            this.marr = [];
-            localStorage.removeItem(MEMORY);
-            // (this._memoryTable as HTMLInputElement).disabled = true;
-            this.checkState(true);
         };
         this.memoryPlus = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+                this.marr = JSON.parse(localStorage.getItem(MEMORY));
+                this.displayValue = this.dis.value;
+                this.marr[this.marr.length - 1] += this.displayValue !== this.Empty ? parseFloat(this.displayValue) : 0;
+                localStorage.setItem(MEMORY, JSON.stringify(this.marr));
             }
-            this.marr = JSON.parse(localStorage.getItem(MEMORY));
-            this.displayValue = this.dis.value;
-            this.marr[this.marr.length - 1] += this.displayValue !== '' ? parseFloat(this.displayValue) : 0;
-            localStorage.setItem(MEMORY, JSON.stringify(this.marr));
         };
         this.memoryMinus = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+                this.marr = JSON.parse(localStorage.getItem(MEMORY));
+                this.displayValue = this.dis.value;
+                this.marr[this.marr.length - 1] -= this.displayValue !== this.Empty ? parseFloat(this.displayValue) : 0;
+                localStorage.setItem(MEMORY, JSON.stringify(this.marr));
             }
-            this.marr = JSON.parse(localStorage.getItem(MEMORY));
-            this.displayValue = this.dis.value;
-            this.marr[this.marr.length - 1] -= this.displayValue !== '' ? parseFloat(this.displayValue) : 0;
-            localStorage.setItem(MEMORY, JSON.stringify(this.marr));
         };
         this.createMemoryTable = () => {
-            if (!this.checkForErrorMessage() || localStorage.getItem(MEMORY) == null) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+                this.marr = JSON.parse(localStorage.getItem(MEMORY));
+                let html = "<table>";
+                for (var i = this.marr.length - 1; i >= 0; i--) {
+                    html += "<tr>";
+                    html += "<td>" + this.marr[i] + "</td>";
+                    html += "</tr>";
+                }
+                html += "</table>";
+                _memory_div.innerHTML = html;
             }
-            this.marr = JSON.parse(localStorage.getItem(MEMORY));
-            console.log(this.marr);
-            let html = "<table>";
-            for (var i = this.marr.length - 1; i >= 0; i--) {
-                html += "<tr>";
-                html += "<td>" + this.marr[i] + "</td>";
-                html += "</tr>";
-            }
-            html += "</table>";
-            (document.getElementById('memory')).innerHTML = html;
         };
         /*****************************************************************Simple Trigonometric Function ************************/
         this.sin = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'sin(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? Math.sin(eval(this.displayValue)).toString() : Math.sin((eval(this.displayValue) * Math.PI) / 180).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'sin(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? Math.sin(eval(this.displayValue)).toString() : Math.sin((eval(this.displayValue) * Math.PI) / 180).toString();
         };
         this.cos = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cos(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? Math.cos(eval(this.displayValue)).toString() : Math.cos((eval(this.displayValue) * Math.PI) / 180).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cos(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? Math.cos(eval(this.displayValue)).toString() : Math.cos((eval(this.displayValue) * Math.PI) / 180).toString();
         };
         this.tan = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'tan(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? Math.tan(eval(this.displayValue)).toString() : Math.tan((eval(this.displayValue) * Math.PI) / 180).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'tan(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? Math.tan(eval(this.displayValue)).toString() : Math.tan((eval(this.displayValue) * Math.PI) / 180).toString();
         };
         this.sec = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'sec(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? (1 / Math.cos(eval(this.displayValue))).toString() : (1 / Math.cos((eval(this.displayValue) * Math.PI) / 180)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'sec(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? (1 / Math.cos(eval(this.displayValue))).toString() : (1 / Math.cos((eval(this.displayValue) * Math.PI) / 180)).toString();
         };
         this.cosec = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cosec(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? (1 / Math.sin(eval(this.displayValue))).toString() : (1 / Math.sin((eval(this.displayValue) * Math.PI) / 180)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cosec(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? (1 / Math.sin(eval(this.displayValue))).toString() : (1 / Math.sin((eval(this.displayValue) * Math.PI) / 180)).toString();
         };
         this.cot = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cot(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? (1 / Math.tan(eval(this.displayValue))).toString() : (1 / Math.tan((eval(this.displayValue) * Math.PI) / 180)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cot(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? (1 / Math.tan(eval(this.displayValue))).toString() : (1 / Math.tan((eval(this.displayValue) * Math.PI) / 180)).toString();
         };
         /*****************************************************************Inverse Trigonometric Function ************************/
         this.sinInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'sin-1(' + this.displayValue + ')';
+                if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
+                    this.dis.value = (this.mode == this.radMode) ? Math.asin(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(eval(this.displayValue))).toString();
+                }
+                this.dis.value = this.Message;
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'sin-1(' + this.displayValue + ')';
-            if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-                this.dis.value = (this.mode == this.radMode) ? Math.asin(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(eval(this.displayValue))).toString();
-                return;
-            }
-            this.dis.value = this.Message;
         };
         this.cosInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cos-1(' + this.displayValue + ')';
+                if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
+                    this.dis.value = (this.mode == this.radMode) ? Math.acos(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(eval(this.displayValue))).toString();
+                }
+                this.dis.value = this.Message;
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cos-1(' + this.displayValue + ')';
-            if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-                this.dis.value = (this.mode == this.radMode) ? Math.acos(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(eval(this.displayValue))).toString();
-                return;
-            }
-            this.dis.value = this.Message;
         };
         this.tanInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'tan-1(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? Math.atan(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'tan-1(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? Math.atan(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(eval(this.displayValue))).toString();
         };
         this.secInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'sec-1(' + this.displayValue + ')';
+                if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
+                    this.dis.value = this.ERROR;
+                    return;
+                }
+                this.dis.value = (this.mode == this.radMode) ? Math.acos(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(1 / eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'sec-1(' + this.displayValue + ')';
-            if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-                this.dis.value = this.ERROR;
-                return;
-            }
-            this.dis.value = (this.mode == this.radMode) ? Math.acos(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(1 / eval(this.displayValue))).toString();
         };
         this.cosecInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cosec-1(' + this.displayValue + ')';
+                if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
+                    this.dis.value = this.ERROR;
+                }
+                this.dis.value = (this.mode == this.radMode) ? Math.asin(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(1 / eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cosec-1(' + this.displayValue + ')';
-            if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-                this.dis.value = this.ERROR;
-                return;
-            }
-            this.dis.value = (this.mode == this.radMode) ? Math.asin(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(1 / eval(this.displayValue))).toString();
         };
         this.cotInverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.mode = this.btntxt.innerHTML;
+                this.upper.value = 'cot-1(' + this.displayValue + ')';
+                this.dis.value = (this.mode == this.radMode) ? Math.atan(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(1 / eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.mode = this.btntxt.innerHTML;
-            this.upper.value = 'cot-1(' + this.displayValue + ')';
-            this.dis.value = (this.mode == this.radMode) ? Math.atan(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(1 / eval(this.displayValue))).toString();
         };
         /*****************************************************************Hyperbolic Trigonometric Function ************************/
         this.sinh = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'sinh(' + this.displayValue + ')';
+                this.dis.value = Math.sinh(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'sinh(' + this.displayValue + ')';
-            this.dis.value = Math.sinh(eval(this.displayValue)).toString();
         };
         this.cosh = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'cosh(' + this.displayValue + ')';
+                this.dis.value = Math.cosh(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'cosh(' + this.displayValue + ')';
-            this.dis.value = Math.cosh(eval(this.displayValue)).toString();
         };
         this.tanh = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'tanh(' + this.displayValue + ')';
+                this.dis.value = Math.tanh(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'tanh(' + this.displayValue + ')';
-            this.dis.value = Math.tanh(eval(this.displayValue)).toString();
         };
         this.sech = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'sech(' + this.displayValue + ')';
+                this.dis.value = (1 / Math.cosh(eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'sech(' + this.displayValue + ')';
-            this.dis.value = (1 / Math.cosh(eval(this.displayValue))).toString();
         };
         this.cosech = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'cosech(' + this.displayValue + ')';
+                this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.sinh(eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'cosech(' + this.displayValue + ')';
-            this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.sinh(eval(this.displayValue))).toString();
         };
         this.coth = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'coth(' + this.dis.value + ')';
+                this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.tanh(eval(this.displayValue))).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'coth(' + this.dis.value + ')';
-            this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.tanh(eval(this.displayValue))).toString();
         };
         /*****************************************************************Functions************************/
         this.absolute = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'abs(' + this.displayValue + ')=';
+                this.dis.value = Math.abs(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'abs(' + this.displayValue + ')=';
-            this.dis.value = Math.abs(eval(this.displayValue)).toString();
         };
         this.ceil = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'ceil(' + this.displayValue + ')';
+                this.dis.value = Math.ceil(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'ceil(' + this.displayValue + ')';
-            this.dis.value = Math.ceil(eval(this.displayValue)).toString();
         };
         this.floor = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = 'floor(' + this.displayValue + ')';
+                this.dis.value = Math.floor(eval(this.displayValue)).toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = 'floor(' + this.displayValue + ')';
-            this.dis.value = Math.floor(eval(this.displayValue)).toString();
         };
         this.rand = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = this.Empty;
+                this.dis.value = Math.random().toString();
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = this.Empty;
-            this.dis.value = Math.random().toString();
         };
         this.degreeMinuteSecond = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = "dms(" + this.displayValue + ")";
+                let degree = Math.floor(parseFloat(this.displayValue));
+                let minutes = ((parseFloat(this.displayValue) - degree) * 60.0);
+                let seconds = (minutes - Math.floor(minutes)) * 60.0;
+                this.dis.value = degree + "." + Math.floor(minutes) + seconds.toFixed(0);
             }
-            this.displayValue = this.dis.value;
-            this.upper.value = "dms(" + this.displayValue + ")";
-            let degree = Math.floor(parseFloat(this.displayValue));
-            let minutes = ((parseFloat(this.displayValue) - degree) * 60.0);
-            let seconds = (minutes - Math.floor(minutes)) * 60.0;
-            this.dis.value = degree + "." + Math.floor(minutes) + seconds.toFixed(0);
         };
         /*****************************************************************Logarithm Function ************************/
         this.log = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            this.displayValue = this.dis.value;
-            if (_log.innerHTML == 'log') {
-                this.upper.value = 'log(' + this.displayValue + ')';
-                this.dis.value = Math.log10(eval(this.displayValue)).toString();
-            }
-            else {
-                if (this.flag) {
-                    this.num = eval(this.displayValue);
-                    this.upper.value = this.num + ' log base ';
-                    this.dis.value = this.Empty;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                if (_log.innerHTML == LOG) {
+                    this.upper.value = 'log(' + this.displayValue + ')';
+                    this.dis.value = Math.log10(eval(this.displayValue)).toString();
                 }
-                else if (!this.flag) {
-                    this.base = eval(this.displayValue);
-                    this.upper.value += this.displayValue;
-                    this.dis.value = (Math.log(this.num) / Math.log(this.base)).toString();
+                else {
+                    if (this.flag) {
+                        this.num = eval(this.displayValue);
+                        this.upper.value = this.num + ' log base ';
+                        this.dis.value = this.Empty;
+                    }
+                    else if (!this.flag) {
+                        this.base = eval(this.displayValue);
+                        this.upper.value += this.displayValue;
+                        this.dis.value = (Math.log(this.num) / Math.log(this.base)).toString();
+                    }
+                    this.flag = !this.flag;
                 }
-                this.flag = !this.flag;
             }
         };
         this.ln = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            this.displayValue = this.dis.value;
-            if (_ln.innerHTML == 'ln') {
-                this.upper.value = 'ln(' + this.displayValue + ')';
-                this.dis.value = Math.log(eval(this.displayValue)).toString();
-            }
-            else {
-                this.upper.value = 'e^(' + this.displayValue + ')';
-                this.dis.value = Math.pow(Math.E, eval(this.displayValue)).toString();
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                if (_ln.innerHTML == LN) {
+                    this.upper.value = 'ln(' + this.displayValue + ')';
+                    this.dis.value = Math.log(eval(this.displayValue)).toString();
+                }
+                else {
+                    this.upper.value = 'e^(' + this.displayValue + ')';
+                    this.dis.value = Math.pow(Math.E, eval(this.displayValue)).toString();
+                }
             }
         };
         /*****************************************************************10^x and 2^x ************************/
         this.tentox = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            if (_tenpow.innerHTML == '10<sup>x</sup>') {
-                this.upper.value = '10^(' + this.dis.value + ')';
-                this.dis.value = Math.pow(10, eval(this.dis.value)).toString();
-            }
-            else {
-                this.upper.value = '2^(' + this.dis.value + ')';
-                this.dis.value = Math.pow(2, eval(this.dis.value)).toString();
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                if (_tenpow.innerHTML == '10<sup>x</sup>') {
+                    this.upper.value = '10^(' + this.dis.value + ')';
+                    this.dis.value = Math.pow(10, eval(this.dis.value)).toString();
+                }
+                else {
+                    this.upper.value = '2^(' + this.dis.value + ')';
+                    this.dis.value = Math.pow(2, eval(this.dis.value)).toString();
+                }
             }
         };
         /*****************************************************************10^x and 2^x ************************/
         this.xtoy = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.dis.value += _xtoy.innerHTML == 'x<sup>y</sup>' ? '^' : (" " + YROOT + " ");
             }
-            this.dis.value += _xtoy.innerHTML == 'x<sup>y</sup>' ? '^' : " yroot ";
         };
         /*****************************************************************Factorial************************/
         this.factorial = () => {
-            this.displayValue = this.dis.value;
-            if (!this.checkForErrorMessage() || Number.parseInt(this.displayValue) < 0) {
-                this.dis.value = this.ERROR;
-                return;
-            }
-            this.upper.value = 'fact(' + this.displayValue + ')';
-            let fact = 1;
-            if (parseFloat(this.displayValue) == 0 || parseFloat(this.displayValue) == 1) {
-                fact = 1;
-            }
-            else {
-                for (let i = 1; i <= parseFloat(this.displayValue); i++) {
-                    fact *= i;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.displayValue = this.op.includes(this.displayValue.slice(-1)) ? this.displayValue.slice(0, -1) : this.displayValue;
+                let val = Number.parseFloat(eval(this.displayValue));
+                if (val < 0) {
+                    this.upper.value = 'fact(' + val + ')';
+                    this.dis.value = this.ERROR;
+                }
+                else {
+                    this.upper.value = 'fact(' + val + ')';
+                    let fact = 1;
+                    if (val == 0 || val == 1) {
+                        fact = 1;
+                    }
+                    else {
+                        for (let i = 1; i <= val; i++) {
+                            fact *= i;
+                        }
+                    }
+                    this.dis.value = fact.toString();
                 }
             }
-            this.dis.value = fact.toString();
         };
         /*****************************************************************plus-minus ************************/
         this.plusminus = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = (this.dis.value);
+                this.dis.value = (parseFloat(this.displayValue) > 0) ? (0 - parseFloat(this.displayValue)).toString() : (Math.abs(parseFloat(this.displayValue))).toString();
             }
-            this.displayValue = (this.dis.value);
-            this.dis.value = (parseFloat(this.displayValue) > 0) ? (0 - parseFloat(this.displayValue)).toString() : (Math.abs(parseFloat(this.displayValue))).toString();
         };
         /*****************************************************************square Root and cube Root ************************/
         this.sqroot = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            this.displayValue = this.dis.value;
-            if (_root.innerHTML == '2√x') {
-                this.upper.value = '√(' + this.displayValue + ')';
-                this.dis.value = Math.sqrt(eval(this.displayValue)).toString();
-            }
-            else {
-                this.upper.value = 'cuberoot(' + this.displayValue + ')';
-                this.dis.value = (Math.pow(eval(this.displayValue), 1 / 3)).toString();
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                if (_root.innerHTML == '2√x') {
+                    this.upper.value = '√(' + this.displayValue + ')';
+                    this.dis.value = Math.sqrt(eval(this.displayValue)).toString();
+                }
+                else {
+                    this.upper.value = 'cuberoot(' + this.displayValue + ')';
+                    this.dis.value = (Math.pow(eval(this.displayValue), 1 / 3)).toString();
+                }
             }
         };
         /*****************************************************************square and cube************************/
         this.sqr = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                if (_sqr.innerHTML == 'x<sup>3</sup>') {
+                    this.upper.value = 'cube(' + this.displayValue + ')';
+                    this.dis.value = Math.pow(eval(this.displayValue), 3).toString();
+                    return;
+                }
+                this.upper.value = 'sqr(' + this.displayValue + ')';
+                this.dis.value = Math.pow(eval(this.displayValue), 2).toString();
             }
-            this.displayValue = this.dis.value;
-            if (_sqr.innerHTML == 'x<sup>3</sup>') {
-                this.upper.value = 'cube(' + this.displayValue + ')';
-                this.dis.value = Math.pow(eval(this.displayValue), 3).toString();
-                return;
-            }
-            this.upper.value = 'sqr(' + this.displayValue + ')';
-            this.dis.value = Math.pow(eval(this.displayValue), 2).toString();
         };
         /*****************************************************************inverse************************/
         this.inverse = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
-            }
-            this.displayValue = this.dis.value;
-            this.upper.value = '1/(' + this.displayValue + ')=';
-            try {
-                let inverseCalculation = eval(this.upper.value.slice(0, -1));
-                this.dis.value = Number.isFinite(inverseCalculation) ? inverseCalculation : this.ERROR;
-            }
-            catch (_a) {
-                this.dis.value = this.ERROR;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                this.upper.value = '1/(' + this.displayValue + ')=';
+                try {
+                    let inverseCalculation = eval(this.upper.value.slice(0, -1));
+                    this.dis.value = Number.isFinite(inverseCalculation) ? inverseCalculation : this.ERROR;
+                }
+                catch (_a) {
+                    this.dis.value = this.ERROR;
+                }
             }
         };
         /*****************************************************************Exponential************************/
         this.expo = () => {
-            if (!this.checkForErrorMessage()) {
-                return;
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                const fE = this.displayValue != this.Empty ? parseFloat(this.displayValue) : 0;
+                this.dis.value = fE.toExponential();
             }
-            this.displayValue = this.dis.value;
-            const fE = this.displayValue != this.Empty ? parseFloat(this.displayValue) : 0;
-            this.dis.value = fE.toExponential();
         };
         /*****************************************************************answer************************/
         this.answer = () => {
-            this.displayValue = this.dis.value;
-            if (!this.checkForErrorMessage() || this.displayValue == this.Invalid) {
-                return;
-            }
-            let error = this.Empty;
-            try {
-                this.upper.value = this.displayValue + '=';
-                this.dis.value = this.Empty;
-                let x = this.upper.value.slice(0, -1);
-                if (x.includes("^")) {
-                    x = x.replace('^', '**');
+            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+                this.displayValue = this.dis.value;
+                let error = this.Empty;
+                try {
+                    this.upper.value = this.displayValue + '=';
+                    this.dis.value = this.Empty;
+                    let x = this.upper.value.slice(0, -1);
+                    if (x.includes("^")) {
+                        x = x.replace('^', '**');
+                    }
+                    else if (x.includes(YROOT)) {
+                        let substrArr = x.split(YROOT);
+                        let rightOprand = substrArr[1].trim();
+                        rightOprand = (1 / eval(rightOprand)).toString();
+                        x = substrArr[0] + ' ** (' + rightOprand + ')';
+                    }
+                    this.output = Number.isFinite(eval(x)) ? eval(x) : this.ERROR;
                 }
-                else if (x.includes("yroot")) {
-                    let substrArr = x.split('yroot');
-                    let rightOprand = substrArr[1].trim();
-                    rightOprand = (1 / eval(rightOprand)).toString();
-                    x = substrArr[0] + ' ** (' + rightOprand + ')';
+                catch (_a) {
+                    error = this.ERROR;
                 }
-                this.output = Number.isFinite(eval(x)) ? eval(x) : this.ERROR;
+                this.dis.value = (error == this.ERROR) ? this.ERROR : ((this.checkedCnt == 1) ? Number.parseFloat(this.output.toString()).toExponential().toString() : this.output.toString());
             }
-            catch (_a) {
-                error = this.ERROR;
-            }
-            this.dis.value = (error == this.ERROR) ? this.ERROR : ((this.checkedCnt == 1) ? Number.parseFloat(this.output.toString()).toExponential().toString() : this.output.toString());
         };
         this.dis = document.getElementById("result");
         this.upper = document.getElementById("subtext");
@@ -587,10 +537,15 @@ class Calculator {
         this.flag = true;
     }
 }
+const calcObj = new Calculator();
 const WHITE_COLOR = 'rgb(255, 255, 255)';
 const LIGHTORANGE_COLOR = 'rgb(255, 191, 190)';
 const BLUE_COLOR = 'rgb(0, 128, 255)';
+const MEMORY_DISABLE_COLOR = 'rgb(225, 225, 225)';
 const MEMORY = 'Memory';
+const LOG = 'log';
+const LN = 'ln';
+const YROOT = 'yroot';
 const _2nd_div = document.getElementById('_2nd_div').style;
 const _sqr_div = document.getElementById('sqr_div').style;
 const _root_div = document.getElementById('root_div').style;
@@ -598,10 +553,14 @@ const _xtoy_div = document.getElementById('xtoy_div').style;
 const _tenpow_div = document.getElementById('tenpow_div').style;
 const _log_div = document.getElementById('log_div').style;
 const _ln_div = document.getElementById('ln_div').style;
-const dlt = document.getElementById("_delete");
-const pop = document.getElementById("_pop");
+const _mc_div = document.getElementById('mc_div').style;
+const _m_div = document.getElementById('m_div').style;
+const _mr_div = document.getElementById('mr_div').style;
 const _mplus = document.getElementById("mplus");
 const _mminus = document.getElementById("mminus");
+const _memory_div = document.getElementById('memory');
+const dlt = document.getElementById("_delete");
+const pop = document.getElementById("_pop");
 const _zero = document.getElementById("_zero");
 const _one = document.getElementById("_one");
 const _two = document.getElementById("_two");
@@ -657,12 +616,6 @@ const _tanH = document.getElementById("_tanH");
 const _secH = document.getElementById("_secH");
 const _cosecH = document.getElementById("_cosecH");
 const _cotH = document.getElementById("_cotH");
-const calcObj = new Calculator();
-document.addEventListener('click', (e) => {
-    if (!calcObj.checkForErrorMessage()) {
-        return;
-    }
-});
 calcObj.btntxt.onclick = () => {
     calcObj.textChange();
 };
@@ -931,9 +884,3 @@ window.onkeydown = (e) => {
             break;
     }
 };
-// document.getElementById("second")!.addEventListener("click", function (e) {
-//     e.stopPropagation();
-// });
-// document.getElementById("second1")!.addEventListener("click", function (e) {
-//     e.stopPropagation();
-// });

@@ -219,41 +219,41 @@ class Calculator {
     }
 
     memoryClear = ():void => {
-        if(!this.checkForErrorMessage() || localStorage.getItem('Memory')==null) {
+        if(!this.checkForErrorMessage() || localStorage.getItem(MEMORY)==null) {
             return;
         }
         this.marr=[];
-        localStorage.removeItem('Memory');
+        localStorage.removeItem(MEMORY);
         // (this._memoryTable as HTMLInputElement).disabled = true;
         this.checkState(true);
     }
 
     memoryPlus = ():void => {
-        if(!this.checkForErrorMessage() || localStorage.getItem('Memory')==null) {
+        if(!this.checkForErrorMessage() || localStorage.getItem(MEMORY)==null) {
             return;
         }
-        this.marr = JSON.parse(localStorage.getItem('Memory')!);
+        this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
         this.displayValue = this.dis.value;
         this.marr[this.marr.length - 1] += this.displayValue!=='' ? parseFloat(this.displayValue) : 0;
-        localStorage.setItem('Memory', JSON.stringify(this.marr));
+        localStorage.setItem(MEMORY, JSON.stringify(this.marr));
     }
 
     memoryMinus = ():void => {
-        if(!this.checkForErrorMessage() || localStorage.getItem('Memory')==null) {
+        if(!this.checkForErrorMessage() || localStorage.getItem(MEMORY)==null) {
             return;
         }
-        this.marr = JSON.parse(localStorage.getItem('Memory')!);
+        this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
         this.displayValue = this.dis.value;
         this.marr[this.marr.length - 1] -= this.displayValue!=='' ? parseFloat(this.displayValue) : 0;
-        localStorage.setItem('Memory', JSON.stringify(this.marr));
+        localStorage.setItem(MEMORY, JSON.stringify(this.marr));
     }
 
     createMemoryTable = ():void => { 
-        if(!this.checkForErrorMessage() || localStorage.getItem('Memory')==null) {
+        if(!this.checkForErrorMessage() || localStorage.getItem(MEMORY)==null) {
             return;
         }
         
-        this.marr = JSON.parse(localStorage.getItem('Memory')!);
+        this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
         console.log(this.marr);
         let html = "<table>";
         for (var i = this.marr.length - 1; i >= 0; i--) {
@@ -273,7 +273,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'sin(' +  this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? Math.sin(eval(this.displayValue)).toString(): Math.sin((eval(this.displayValue) * Math.PI) / 180).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.sin(eval(this.displayValue)).toString(): Math.sin((eval(this.displayValue) * Math.PI) / 180).toString();
     }
 
     cos = ():void => {
@@ -283,7 +283,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'cos(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? Math.cos(eval(this.displayValue)).toString() : Math.cos((eval(this.displayValue) * Math.PI) / 180).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.cos(eval(this.displayValue)).toString() : Math.cos((eval(this.displayValue) * Math.PI) / 180).toString();
     }
 
     tan = ():void => {
@@ -293,7 +293,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'tan(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? Math.tan(eval(this.displayValue)).toString() : Math.tan((eval(this.displayValue) * Math.PI) / 180).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.tan(eval(this.displayValue)).toString() : Math.tan((eval(this.displayValue) * Math.PI) / 180).toString();
     }
     
     sec = ():void => {
@@ -303,7 +303,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode =  this.btntxt.innerHTML;
         this.upper.value = 'sec(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? (1 / Math.cos(eval(this.displayValue))).toString() : (1 / Math.cos((eval(this.displayValue) * Math.PI) / 180)).toString();
+        this.dis.value = (this.mode == this.radMode) ? (1 / Math.cos(eval(this.displayValue))).toString() : (1 / Math.cos((eval(this.displayValue) * Math.PI) / 180)).toString();
     }
     
     cosec = ():void => {
@@ -313,7 +313,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'cosec(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? (1 / Math.sin(eval(this.displayValue))).toString() : (1 / Math.sin((eval(this.displayValue) * Math.PI) / 180)).toString();
+        this.dis.value = (this.mode == this.radMode) ? (1 / Math.sin(eval(this.displayValue))).toString() : (1 / Math.sin((eval(this.displayValue) * Math.PI) / 180)).toString();
     }
     
     cot = ():void => {
@@ -323,7 +323,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'cot(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? (1 / Math.tan(eval(this.displayValue))).toString() : (1 / Math.tan((eval(this.displayValue) * Math.PI) / 180)).toString();
+        this.dis.value = (this.mode == this.radMode) ? (1 / Math.tan(eval(this.displayValue))).toString() : (1 / Math.tan((eval(this.displayValue) * Math.PI) / 180)).toString();
     }
 
     /*****************************************************************Inverse Trigonometric Function ************************/
@@ -336,7 +336,7 @@ class Calculator {
         this.upper.value = 'sin-1(' + this.displayValue + ')';
     
         if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-            this.dis.value = (this.mode == 'RAD') ? Math.asin(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(eval(this.displayValue))).toString();
+            this.dis.value = (this.mode == this.radMode) ? Math.asin(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(eval(this.displayValue))).toString();
             return;
         }
         this.dis.value = this.Message;
@@ -351,7 +351,7 @@ class Calculator {
         this.upper.value = 'cos-1(' + this.displayValue + ')';
     
         if (parseFloat(this.displayValue) >= -1 && parseFloat(this.displayValue) <= 1) {
-            this.dis.value = (this.mode == 'RAD') ? Math.acos(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(eval(this.displayValue))).toString();
+            this.dis.value = (this.mode == this.radMode) ? Math.acos(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(eval(this.displayValue))).toString();
             return;
         }
         this.dis.value = this.Message;
@@ -364,7 +364,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'tan-1(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? Math.atan(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(eval(this.displayValue))).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.atan(eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(eval(this.displayValue))).toString();
     }
 
     secInverse = ():void => {
@@ -379,7 +379,7 @@ class Calculator {
             this.dis.value = this.ERROR;
             return
         }
-        this.dis.value = (this.mode == 'RAD') ? Math.acos(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(1 / eval(this.displayValue))).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.acos(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.acos(1 / eval(this.displayValue))).toString();
     }
 
     cosecInverse = ():void => {
@@ -394,7 +394,7 @@ class Calculator {
             this.dis.value = this.ERROR;
             return;
         }
-        this.dis.value = (this.mode == 'RAD') ? Math.asin(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(1 / eval(this.displayValue))).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.asin(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.asin(1 / eval(this.displayValue))).toString();
     }
 
     cotInverse = ():void => {
@@ -404,7 +404,7 @@ class Calculator {
         this.displayValue = this.dis.value;
         this.mode = this.btntxt.innerHTML;
         this.upper.value = 'cot-1(' + this.displayValue + ')';
-        this.dis.value = (this.mode == 'RAD') ? Math.atan(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(1 / eval(this.displayValue))).toString();
+        this.dis.value = (this.mode == this.radMode) ? Math.atan(1 / eval(this.displayValue)).toString() : this.inv_RAD_DEG(Math.atan(1 / eval(this.displayValue))).toString();
     }
 
     /*****************************************************************Hyperbolic Trigonometric Function ************************/
@@ -708,8 +708,6 @@ class Calculator {
         this.dis.value = (error==this.ERROR) ? this.ERROR : ((this.checkedCnt==1) ? Number.parseFloat(this.output.toString()).toExponential().toString() : this.output.toString());
     }
 }
-
-
 
 
 const WHITE_COLOR:string = 'rgb(255, 255, 255)';

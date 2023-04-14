@@ -72,6 +72,10 @@ class Calculator {
              this.base = 0;
              this.flag = true;
         }
+
+        checkForError = ():boolean => {
+            return (this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message);
+        }
     
         textChange = ():void => {
             this.btntxt.innerHTML =  (this.btntxt.innerHTML==this.degMode) ? this.radMode : this.degMode;
@@ -117,7 +121,7 @@ class Calculator {
         /*****************************************************************Display on Screen************************/ 
     
         display = (val:string):void => { 
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {     
+            if(this.checkForError()) {     
                 this.displayValue = this.dis.value;
                 let oldOperator = this.displayValue.slice(-1);
             
@@ -125,7 +129,7 @@ class Calculator {
                     this.dis.value = this.displayValue.slice(0, -1) + val;
                 } 
                 else if(val==Math.PI.toString() || val==Math.E.toString()) {
-                    if(this.op.slice(0, 5).includes(oldOperator)) {
+                    if(this.op.slice(0, 5).includes(oldOperator)||this.otherInput.slice(0, 2).includes(oldOperator)) {
                         val = (this.checkedCnt==1)?Number.parseFloat(val).toExponential().toString():val;
                         this.dis.value += val;
                         return;
@@ -177,7 +181,7 @@ class Calculator {
         }
     
         memoryStore = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) { 
+            if(this.checkForError()) { 
                 this.displayValue = this.dis.value;
         
                 if(localStorage.getItem(MEMORY)!=null) {
@@ -194,14 +198,14 @@ class Calculator {
         }
     
         memoryRead = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message && localStorage.getItem(MEMORY)!=null) {
+            if(this.checkForError() && localStorage.getItem(MEMORY)!=null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
                 this.dis.value = this.marr[this.marr.length - 1].toString();
             }
         }
     
         memoryClear = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message && localStorage.getItem(MEMORY)!=null) {
+            if(this.checkForError() && localStorage.getItem(MEMORY)!=null) {
                 this.marr=[];
                 localStorage.removeItem(MEMORY);
                 this.checkState(true);
@@ -209,7 +213,7 @@ class Calculator {
         }
     
         memoryPlus = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message && localStorage.getItem(MEMORY)!=null) {
+            if(this.checkForError() && localStorage.getItem(MEMORY)!=null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
                 this.displayValue = this.dis.value;
                 this.marr[this.marr.length - 1] += this.displayValue!==this.Empty ? parseFloat(this.displayValue) : 0;
@@ -218,7 +222,7 @@ class Calculator {
         }
     
         memoryMinus = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message && localStorage.getItem(MEMORY)!=null) {
+            if(this.checkForError() && localStorage.getItem(MEMORY)!=null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
                 this.displayValue = this.dis.value;
                 this.marr[this.marr.length - 1] -= this.displayValue!==this.Empty ? parseFloat(this.displayValue) : 0;
@@ -227,7 +231,7 @@ class Calculator {
         }
     
         createMemoryTable = ():void => { 
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message && localStorage.getItem(MEMORY)!=null) {
+            if(this.checkForError() && localStorage.getItem(MEMORY)!=null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY)!);
                 let html = "<table>";
                 for (var i = this.marr.length - 1; i >= 0; i--) {
@@ -244,7 +248,7 @@ class Calculator {
         
         
         sin = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sin(' +  this.displayValue + ')';
@@ -253,7 +257,7 @@ class Calculator {
         }
     
         cos = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cos(' + this.displayValue + ')';
@@ -262,7 +266,7 @@ class Calculator {
         }
     
         tan = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'tan(' + this.displayValue + ')';
@@ -271,7 +275,7 @@ class Calculator {
         }
         
         sec = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode =  this.btntxt.innerHTML;
                 this.upper.value = 'sec(' + this.displayValue + ')';
@@ -280,7 +284,7 @@ class Calculator {
         }
         
         cosec = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cosec(' + this.displayValue + ')';
@@ -289,7 +293,7 @@ class Calculator {
         }
         
         cot = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cot(' + this.displayValue + ')';
@@ -299,7 +303,7 @@ class Calculator {
     
         /*****************************************************************Inverse Trigonometric Function ************************/
         sinInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sin-1(' + this.displayValue + ')';
@@ -313,7 +317,7 @@ class Calculator {
         }
     
         cosInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cos-1(' + this.displayValue + ')';
@@ -327,7 +331,7 @@ class Calculator {
         }
     
         tanInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'tan-1(' + this.displayValue + ')';
@@ -336,7 +340,7 @@ class Calculator {
         }
     
         secInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sec-1(' + this.displayValue + ')';
@@ -350,7 +354,7 @@ class Calculator {
         }
     
         cosecInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cosec-1(' + this.displayValue + ')';
@@ -364,7 +368,7 @@ class Calculator {
         }
     
         cotInverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cot-1(' + this.displayValue + ')';
@@ -374,7 +378,7 @@ class Calculator {
     
         /*****************************************************************Hyperbolic Trigonometric Function ************************/
         sinh = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'sinh(' + this.displayValue + ')';
                 this.dis.value = Math.sinh(eval(this.displayValue)).toString();
@@ -382,7 +386,7 @@ class Calculator {
         }
     
         cosh = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'cosh(' + this.displayValue + ')';
                 this.dis.value = Math.cosh(eval(this.displayValue)).toString();
@@ -390,7 +394,7 @@ class Calculator {
         }
     
         tanh = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'tanh(' + this.displayValue + ')';
                 this.dis.value = Math.tanh(eval(this.displayValue)).toString();
@@ -398,7 +402,7 @@ class Calculator {
         }
     
         sech = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'sech(' + this.displayValue + ')';
                 this.dis.value = (1 / Math.cosh(eval(this.displayValue))).toString();
@@ -406,7 +410,7 @@ class Calculator {
         }
     
         cosech = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'cosech(' + this.displayValue + ')';
                 this.dis.value = (this.displayValue=='0') ? this.Alert : (1 / Math.sinh(eval(this.displayValue))).toString();
@@ -414,7 +418,7 @@ class Calculator {
         }
         
         coth = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'coth(' + this.dis.value + ')';
                 this.dis.value = (this.displayValue=='0') ?this. Alert : (1 / Math.tanh(eval(this.displayValue))).toString();
@@ -424,7 +428,7 @@ class Calculator {
         /*****************************************************************Functions************************/
     
         absolute = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'abs(' + this.displayValue + ')=';
                 this.dis.value = Math.abs(eval(this.displayValue)).toString();
@@ -432,7 +436,7 @@ class Calculator {
         }
     
         ceil = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'ceil(' + this.displayValue + ')';
                 this.dis.value = Math.ceil(eval(this.displayValue)).toString();
@@ -440,7 +444,7 @@ class Calculator {
         }
     
         floor = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'floor(' + this.displayValue + ')';
                 this.dis.value = Math.floor(eval(this.displayValue)).toString();
@@ -448,14 +452,14 @@ class Calculator {
         }
     
         rand = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = this.Empty;
                 this.dis.value = Math.random().toString();
             }
         }
         degreeMinuteSecond = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = "dms(" + this.displayValue + ")";
                 let degree = Math.floor(parseFloat(this.displayValue));
@@ -468,7 +472,7 @@ class Calculator {
         /*****************************************************************Logarithm Function ************************/
     
         log = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
         
                 if (_log.innerHTML == LOG) {
@@ -492,7 +496,7 @@ class Calculator {
         }
     
         ln = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
             
                 if (_ln.innerHTML == LN) {
@@ -508,8 +512,8 @@ class Calculator {
          /*****************************************************************10^x and 2^x ************************/
     
         tentox = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
-                if (_tenpow.innerHTML == '10<sup>x</sup>') {
+            if(this.checkForError()) {
+                if (_tenpow.innerHTML == TENTOX) {
                     this.upper.value = '10^(' + this.dis.value + ')';
                     this.dis.value = Math.pow(10, eval(this.dis.value)).toString();
                 } 
@@ -523,7 +527,7 @@ class Calculator {
         /*****************************************************************10^x and 2^x ************************/
     
         xtoy = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.dis.value += _xtoy.innerHTML == 'x<sup>y</sup>' ? '^' : (" " + YROOT + " ");
             }
         }
@@ -532,17 +536,13 @@ class Calculator {
     
         factorial = ():void => {
 
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.displayValue = this.op.includes(this.displayValue.slice(-1))?this.displayValue.slice(0, -1):this.displayValue;
     
                 let val:number = Number.parseFloat(eval(this.displayValue));
 
-                if(val<0) {
-                    this.upper.value = 'fact(' + val + ')';
-                    this.dis.value = this.ERROR;
-                }
-                else {
+                if(val>=0) {
                     this.upper.value = 'fact(' + val + ')';
                     let fact = 1;
                     if (val == 0 || val == 1) {
@@ -555,22 +555,28 @@ class Calculator {
                     }
                     this.dis.value = fact.toString();
                 }
+                else {
+                    
+
+                    this.upper.value = 'fact(' + val + ')';
+                    this.dis.value = this.ERROR;
+                }
             }
         }
     
          /*****************************************************************plus-minus ************************/
          plusminus = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = (this.dis.value);
                 this.dis.value = (parseFloat(this.displayValue)>0) ? (0-parseFloat(this.displayValue)).toString() : (Math.abs(parseFloat(this.displayValue))).toString();
             }
         }
         /*****************************************************************square Root and cube Root ************************/
         sqroot = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
 
-                if (_root.innerHTML == '2√x') {
+                if (_root.innerHTML == SQUAREROOT) {
                     this.upper.value = '√(' + this.displayValue + ')';
                     this.dis.value = Math.sqrt(eval(this.displayValue)).toString();
                 } else {
@@ -582,10 +588,10 @@ class Calculator {
     
         /*****************************************************************square and cube************************/
         sqr = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
         
-                if (_sqr.innerHTML == 'x<sup>3</sup>') {
+                if (_sqr.innerHTML == XCUBE) {
                     this.upper.value = 'cube(' + this.displayValue + ')';
                     this.dis.value = Math.pow(eval(this.displayValue), 3).toString();
                     return;
@@ -598,7 +604,7 @@ class Calculator {
         /*****************************************************************inverse************************/
     
         inverse = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = '1/(' + this.displayValue + ')=';
                 try{
@@ -614,7 +620,7 @@ class Calculator {
         /*****************************************************************Exponential************************/
     
         expo = ():void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
                 this.displayValue = this.dis.value; 
                 const fE = this.displayValue!=this.Empty ? parseFloat(this.displayValue) : 0;
                 this.dis.value = fE.toExponential();
@@ -624,7 +630,7 @@ class Calculator {
         /*****************************************************************answer************************/
     
         answer = (): void => {
-            if(this.dis.value!=this.ERROR && this.dis.value!=this.INFINITY && this.dis.value!=this.Invalid && this.dis.value!=this.NAN && this.dis.value!=this.Alert && this.dis.value!=this.Message) {
+            if(this.checkForError()) {
 
                 this.displayValue = this.dis.value;
                 let error = this.Empty;
@@ -666,6 +672,9 @@ const MEMORY:string = 'Memory';
 const LOG:string = 'log';
 const LN:string = 'ln';
 const YROOT:string = 'yroot';
+const SQUAREROOT:string = '2√x';
+const TENTOX:string = '10<sup>x</sup>';
+const XCUBE:string = 'x<sup>3</sup>';
 
 const _2nd_div = document.getElementById('_2nd_div')!.style;
 const _sqr_div = document.getElementById('sqr_div')!.style;

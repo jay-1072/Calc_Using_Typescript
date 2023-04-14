@@ -1,6 +1,9 @@
 "use strict";
 class Calculator {
     constructor() {
+        this.checkForError = () => {
+            return (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message);
+        };
         this.textChange = () => {
             this.btntxt.innerHTML = (this.btntxt.innerHTML == this.degMode) ? this.radMode : this.degMode;
         };
@@ -41,14 +44,14 @@ class Calculator {
         };
         /*****************************************************************Display on Screen************************/
         this.display = (val) => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 let oldOperator = this.displayValue.slice(-1);
                 if (this.op.includes(val) && this.op.includes(oldOperator)) {
                     this.dis.value = this.displayValue.slice(0, -1) + val;
                 }
                 else if (val == Math.PI.toString() || val == Math.E.toString()) {
-                    if (this.op.slice(0, 5).includes(oldOperator)) {
+                    if (this.op.slice(0, 5).includes(oldOperator) || this.otherInput.slice(0, 2).includes(oldOperator)) {
                         val = (this.checkedCnt == 1) ? Number.parseFloat(val).toExponential().toString() : val;
                         this.dis.value += val;
                         return;
@@ -92,7 +95,7 @@ class Calculator {
             this._memoryRestore.disabled = state;
         };
         this.memoryStore = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 if (localStorage.getItem(MEMORY) != null) {
                     this.marr = JSON.parse(localStorage.getItem(MEMORY));
@@ -104,20 +107,20 @@ class Calculator {
             }
         };
         this.memoryRead = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+            if (this.checkForError() && localStorage.getItem(MEMORY) != null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY));
                 this.dis.value = this.marr[this.marr.length - 1].toString();
             }
         };
         this.memoryClear = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+            if (this.checkForError() && localStorage.getItem(MEMORY) != null) {
                 this.marr = [];
                 localStorage.removeItem(MEMORY);
                 this.checkState(true);
             }
         };
         this.memoryPlus = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+            if (this.checkForError() && localStorage.getItem(MEMORY) != null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY));
                 this.displayValue = this.dis.value;
                 this.marr[this.marr.length - 1] += this.displayValue !== this.Empty ? parseFloat(this.displayValue) : 0;
@@ -125,7 +128,7 @@ class Calculator {
             }
         };
         this.memoryMinus = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+            if (this.checkForError() && localStorage.getItem(MEMORY) != null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY));
                 this.displayValue = this.dis.value;
                 this.marr[this.marr.length - 1] -= this.displayValue !== this.Empty ? parseFloat(this.displayValue) : 0;
@@ -133,7 +136,7 @@ class Calculator {
             }
         };
         this.createMemoryTable = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message && localStorage.getItem(MEMORY) != null) {
+            if (this.checkForError() && localStorage.getItem(MEMORY) != null) {
                 this.marr = JSON.parse(localStorage.getItem(MEMORY));
                 let html = "<table>";
                 for (var i = this.marr.length - 1; i >= 0; i--) {
@@ -147,7 +150,7 @@ class Calculator {
         };
         /*****************************************************************Simple Trigonometric Function ************************/
         this.sin = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sin(' + this.displayValue + ')';
@@ -155,7 +158,7 @@ class Calculator {
             }
         };
         this.cos = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cos(' + this.displayValue + ')';
@@ -163,7 +166,7 @@ class Calculator {
             }
         };
         this.tan = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'tan(' + this.displayValue + ')';
@@ -171,7 +174,7 @@ class Calculator {
             }
         };
         this.sec = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sec(' + this.displayValue + ')';
@@ -179,7 +182,7 @@ class Calculator {
             }
         };
         this.cosec = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cosec(' + this.displayValue + ')';
@@ -187,7 +190,7 @@ class Calculator {
             }
         };
         this.cot = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cot(' + this.displayValue + ')';
@@ -196,7 +199,7 @@ class Calculator {
         };
         /*****************************************************************Inverse Trigonometric Function ************************/
         this.sinInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sin-1(' + this.displayValue + ')';
@@ -207,7 +210,7 @@ class Calculator {
             }
         };
         this.cosInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cos-1(' + this.displayValue + ')';
@@ -218,7 +221,7 @@ class Calculator {
             }
         };
         this.tanInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'tan-1(' + this.displayValue + ')';
@@ -226,7 +229,7 @@ class Calculator {
             }
         };
         this.secInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'sec-1(' + this.displayValue + ')';
@@ -238,7 +241,7 @@ class Calculator {
             }
         };
         this.cosecInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cosec-1(' + this.displayValue + ')';
@@ -249,7 +252,7 @@ class Calculator {
             }
         };
         this.cotInverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.mode = this.btntxt.innerHTML;
                 this.upper.value = 'cot-1(' + this.displayValue + ')';
@@ -258,42 +261,42 @@ class Calculator {
         };
         /*****************************************************************Hyperbolic Trigonometric Function ************************/
         this.sinh = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'sinh(' + this.displayValue + ')';
                 this.dis.value = Math.sinh(eval(this.displayValue)).toString();
             }
         };
         this.cosh = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'cosh(' + this.displayValue + ')';
                 this.dis.value = Math.cosh(eval(this.displayValue)).toString();
             }
         };
         this.tanh = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'tanh(' + this.displayValue + ')';
                 this.dis.value = Math.tanh(eval(this.displayValue)).toString();
             }
         };
         this.sech = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'sech(' + this.displayValue + ')';
                 this.dis.value = (1 / Math.cosh(eval(this.displayValue))).toString();
             }
         };
         this.cosech = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'cosech(' + this.displayValue + ')';
                 this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.sinh(eval(this.displayValue))).toString();
             }
         };
         this.coth = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'coth(' + this.dis.value + ')';
                 this.dis.value = (this.displayValue == '0') ? this.Alert : (1 / Math.tanh(eval(this.displayValue))).toString();
@@ -301,35 +304,35 @@ class Calculator {
         };
         /*****************************************************************Functions************************/
         this.absolute = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'abs(' + this.displayValue + ')=';
                 this.dis.value = Math.abs(eval(this.displayValue)).toString();
             }
         };
         this.ceil = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'ceil(' + this.displayValue + ')';
                 this.dis.value = Math.ceil(eval(this.displayValue)).toString();
             }
         };
         this.floor = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = 'floor(' + this.displayValue + ')';
                 this.dis.value = Math.floor(eval(this.displayValue)).toString();
             }
         };
         this.rand = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = this.Empty;
                 this.dis.value = Math.random().toString();
             }
         };
         this.degreeMinuteSecond = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = "dms(" + this.displayValue + ")";
                 let degree = Math.floor(parseFloat(this.displayValue));
@@ -340,7 +343,7 @@ class Calculator {
         };
         /*****************************************************************Logarithm Function ************************/
         this.log = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 if (_log.innerHTML == LOG) {
                     this.upper.value = 'log(' + this.displayValue + ')';
@@ -362,7 +365,7 @@ class Calculator {
             }
         };
         this.ln = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 if (_ln.innerHTML == LN) {
                     this.upper.value = 'ln(' + this.displayValue + ')';
@@ -376,8 +379,8 @@ class Calculator {
         };
         /*****************************************************************10^x and 2^x ************************/
         this.tentox = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
-                if (_tenpow.innerHTML == '10<sup>x</sup>') {
+            if (this.checkForError()) {
+                if (_tenpow.innerHTML == TENTOX) {
                     this.upper.value = '10^(' + this.dis.value + ')';
                     this.dis.value = Math.pow(10, eval(this.dis.value)).toString();
                 }
@@ -389,21 +392,17 @@ class Calculator {
         };
         /*****************************************************************10^x and 2^x ************************/
         this.xtoy = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.dis.value += _xtoy.innerHTML == 'x<sup>y</sup>' ? '^' : (" " + YROOT + " ");
             }
         };
         /*****************************************************************Factorial************************/
         this.factorial = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.displayValue = this.op.includes(this.displayValue.slice(-1)) ? this.displayValue.slice(0, -1) : this.displayValue;
                 let val = Number.parseFloat(eval(this.displayValue));
-                if (val < 0) {
-                    this.upper.value = 'fact(' + val + ')';
-                    this.dis.value = this.ERROR;
-                }
-                else {
+                if (val >= 0) {
                     this.upper.value = 'fact(' + val + ')';
                     let fact = 1;
                     if (val == 0 || val == 1) {
@@ -416,20 +415,24 @@ class Calculator {
                     }
                     this.dis.value = fact.toString();
                 }
+                else {
+                    this.upper.value = 'fact(' + val + ')';
+                    this.dis.value = this.ERROR;
+                }
             }
         };
         /*****************************************************************plus-minus ************************/
         this.plusminus = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = (this.dis.value);
                 this.dis.value = (parseFloat(this.displayValue) > 0) ? (0 - parseFloat(this.displayValue)).toString() : (Math.abs(parseFloat(this.displayValue))).toString();
             }
         };
         /*****************************************************************square Root and cube Root ************************/
         this.sqroot = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
-                if (_root.innerHTML == '2√x') {
+                if (_root.innerHTML == SQUAREROOT) {
                     this.upper.value = '√(' + this.displayValue + ')';
                     this.dis.value = Math.sqrt(eval(this.displayValue)).toString();
                 }
@@ -441,9 +444,9 @@ class Calculator {
         };
         /*****************************************************************square and cube************************/
         this.sqr = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
-                if (_sqr.innerHTML == 'x<sup>3</sup>') {
+                if (_sqr.innerHTML == XCUBE) {
                     this.upper.value = 'cube(' + this.displayValue + ')';
                     this.dis.value = Math.pow(eval(this.displayValue), 3).toString();
                     return;
@@ -454,7 +457,7 @@ class Calculator {
         };
         /*****************************************************************inverse************************/
         this.inverse = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 this.upper.value = '1/(' + this.displayValue + ')=';
                 try {
@@ -468,7 +471,7 @@ class Calculator {
         };
         /*****************************************************************Exponential************************/
         this.expo = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 const fE = this.displayValue != this.Empty ? parseFloat(this.displayValue) : 0;
                 this.dis.value = fE.toExponential();
@@ -476,7 +479,7 @@ class Calculator {
         };
         /*****************************************************************answer************************/
         this.answer = () => {
-            if (this.dis.value != this.ERROR && this.dis.value != this.INFINITY && this.dis.value != this.Invalid && this.dis.value != this.NAN && this.dis.value != this.Alert && this.dis.value != this.Message) {
+            if (this.checkForError()) {
                 this.displayValue = this.dis.value;
                 let error = this.Empty;
                 try {
@@ -546,6 +549,9 @@ const MEMORY = 'Memory';
 const LOG = 'log';
 const LN = 'ln';
 const YROOT = 'yroot';
+const SQUAREROOT = '2√x';
+const TENTOX = '10<sup>x</sup>';
+const XCUBE = 'x<sup>3</sup>';
 const _2nd_div = document.getElementById('_2nd_div').style;
 const _sqr_div = document.getElementById('sqr_div').style;
 const _root_div = document.getElementById('root_div').style;
